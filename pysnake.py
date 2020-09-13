@@ -8,7 +8,6 @@ import math
 import random
 import pygame
 from tkinter import messagebox
-
 from pygame import surface
 from pygame import color
 
@@ -103,7 +102,13 @@ class snake(object):
 
 
     def reset(self, pos):
-        pass
+        # Clearing all the cubes and body
+        self.head = cube(pos)
+        self.body = []
+        self.body.append(self.head)
+        self.turns = {}
+        self.dirnx = 0
+        self.dirny = 1
 
     def addCube(self):
         tail = self.body[-1]
@@ -165,7 +170,14 @@ def randomSnack(rows, item):
     return (x,y)
 
 def message_box(subject, content):
-    pass
+    # A message box that actually shows up on top of the screen
+    root = tk.Tk()  # Calling in a new window
+    root.attributes("-topmost", True)
+    messagebox.showinfo(subject, content)
+    try:
+        root.destroy()
+    except:
+        pass
 
 # The main loop of the game
 def main():
@@ -185,12 +197,16 @@ def main():
 
         s.move()
         if s.body[0].pos == snack.pos:
-            s.addCube() = cube(randomSnack(rows, s), color(0, 255, 0))
+            s.addCube() == cube(randomSnack(rows, s), color(0, 255, 0))
 
         for x in range(len(s.body)):
-            if s.body[x].pos in list
+            if s.body[x].pos in list(map(lambda z:z.pos, s.body[x+1:])):
+                print('Score: ', len(s.body))
+                message_box('You lost!', 'Try Again later...')
+                s.reset((10, 10))
+                break
         redrawWindow(win)
 
     pass
-
+# Calling the main loop function
 main()
