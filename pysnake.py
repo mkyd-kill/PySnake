@@ -10,8 +10,22 @@ import random
 import tkinter as tk
 from tkinter import messagebox
 
+pygame.font.init()
+
+# Global variables
 width = 500
 height = 500
+
+s_width = 700
+s_height = 700
+play_width = 300  # meaning 300 // 10 = 30 width per block
+play_height = 600 # meaning 600 // 20 = 30 height per block
+
+top_left_x = (s_width - play_width) // 2
+top_left_y = s_height - play_height
+
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 cols = 25
 rows = 20
@@ -135,7 +149,13 @@ def redrawWindow():
     s.draw(win)
     snack.draw(win)
     pygame.display.update()
-    pass
+
+
+def draw_text_middle(surface, text, size, color):
+      font = pygame.font.SysFont('Times New Roman', size, bold=True)
+      label = font.render(text, 1, color)
+
+      surface.blit(label, (top_left_x + play_width / 2 - (label.get_width() / 2), top_left_y + play_height / 2 - (label.get_height() / 2)))
 
 
 
@@ -197,4 +217,24 @@ def main():
                     
         redrawWindow()
 
-main()
+def main_menu(win):
+      run = True
+      while run:
+            win.fill(BLACK)
+            draw_text_middle(win, "Press any key to start", 60, WHITE)
+            pygame.display.update()
+
+            for event in pygame.event.get():
+                  if event.type == pygame.QUIT:
+                        run = False
+
+                  if event.type == pygame.KEYDOWN:
+                        main()
+
+      pygame.display.quit()
+
+
+win = pygame.display.set_mode((s_width, s_height))
+pygame.display.set_caption('Snake Game')
+
+main_menu(win)
