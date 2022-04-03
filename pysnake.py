@@ -3,13 +3,11 @@
 # Uses simple functions, variables and is fun to code
 
 # importations
-import math
 import random
 import pygame
-import random
-import tkinter as tk
-from tkinter import messagebox
+import sys
 
+pygame.init()
 pygame.font.init()
 
 # Global variables
@@ -26,10 +24,13 @@ top_left_y = s_height - play_height
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
 
 cols = 25
 rows = 20
 
+win = pygame.display.set_mode((s_width, s_height))
+pygame.display.set_caption('Snake Game')
 
 class cube():
     rows = 20
@@ -75,9 +76,12 @@ class snake():
         self.dirny = 1
     
     def move(self):
+        pygame.init()
         for event in pygame.event.get():
+            pygame.init()
             if event.type == pygame.QUIT:
                 pygame.quit()
+            pygame.init()
             keys = pygame.key.get_pressed()
 
             for key in keys:
@@ -141,18 +145,20 @@ class snake():
                 c.draw(surface)
 
 
-
 def redrawWindow():
     global win
-    win.fill((0,0,0))
-    drawGrid(width, rows, win)
-    s.draw(win)
-    snack.draw(win)
-    pygame.display.update()
+    try:
+        win.fill((0,0,0))
+        drawGrid(width, rows, win)
+        s.draw(win)
+        snack.draw(win)
+        pygame.display.update()
+    except pygame.error:
+        sys.exit(0)
 
 
 def draw_text_middle(surface, text, size, color):
-      font = pygame.font.SysFont('Times New Roman', size, bold=True)
+      font = pygame.font.SysFont('Times New Roman', size, bold=False)
       label = font.render(text, 1, color)
 
       surface.blit(label, (top_left_x + play_width / 2 - (label.get_width() / 2), top_left_y + play_height / 2 - (label.get_height() / 2)))
@@ -221,7 +227,7 @@ def main_menu(win):
       run = True
       while run:
             win.fill(BLACK)
-            draw_text_middle(win, "Press any key to start", 60, WHITE)
+            draw_text_middle(win, "Press any key to start", 50, GREEN)
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -232,9 +238,3 @@ def main_menu(win):
                         main()
 
       pygame.display.quit()
-
-
-win = pygame.display.set_mode((s_width, s_height))
-pygame.display.set_caption('Snake Game')
-
-main_menu(win)
